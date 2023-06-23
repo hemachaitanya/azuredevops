@@ -65,4 +65,13 @@ The cost of fixing issues at different stages
      Minimum Project management
      Boards
      Test Managements
-    
+
+      * mkdir myagent
+      * cd myagent
+      * wget https://vstsagentpackage.azureedge.net/agent/3.220.2/vsts-agent-linux-x64-3.220.2.tar.gz
+      * tar zxvf vsts-agent-linux-x64-3.220.2.tar.gz
+      * ./config.sh
+          azuredevops url
+          token
+      * ./run.sh
+

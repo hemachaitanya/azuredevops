@@ -1,10 +1,98 @@
+#### spring pet clinic project on task formate
 ---
 pool: Default
 trigger:
   - main
 steps:
-  - task: Maven@3
+  - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
       goals: 'package'
       jdkVersionOption: '1.17'
+### spring pet clinic pipeline on script formate
+---
+---
+
+pool: 'Default'
+
+trigger:
+  - main
+steps:
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'Path'
+    jdkDirectory: '/usr/lib/jvm/java-1.17.0-openjdk-amd64'
+    mavenVersionOption: 'Path'
+    mavenDirectory: '/usr/share/maven'
+    mavenSetM2Home: false
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+
+
+
+### game of life project on script formate
+
+---
+pool: 'Default'
+
+triggers:
+  - main
+steps:
+  - workingDirectory: game-of-life
+  - script: 'mvn package'
+    displayName: 'gameoflife-mvn project'
+
+### game of life pipeline in tasksmformate
+---
+pool: 'Default'
+trigger:
+  - main
+steps:
+  - task: Maven@4
+    inputs:
+      mavenPOMFile: 'pom.xml'
+      goals: 'package'
+      javaHomeOption: '1.08'
+
+# build docker image
+##  build docker image , then install docker and go to docker file
+pool: 'Default'
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+## download docker by using scripts
+
+---
+pool: Default
+  
+trigger:
+  - main
+steps:
+- script: curl -fsSL https://get.docker.com -o get-docker.sh
+- script: sh get-docker.sh
+- script: sudo usermod -aG docker ubuntu
+- script: docker info
