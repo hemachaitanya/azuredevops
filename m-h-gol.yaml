@@ -14,9 +14,20 @@ jobs:
         goals: 'package'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        javaHomeOption: "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"
+        javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.8'
         mavenVersionOption: 'Default'
+    - task: CopyFiles@2
+      inputs:
+        Contents: '**/target/gameoflife.war'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'GameOfLife artifacts'
+
+
+
 
 
    

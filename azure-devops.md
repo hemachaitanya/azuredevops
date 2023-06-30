@@ -47,7 +47,45 @@ cofiguration drift : difference b/w desired state and actual stage
 ### pool: 
  * pool: collection of agents(if u have multiple machines)
 
- 
+### Publish artifacts is used for to save the artifacts
+
+'''
+---
+trigger:
+  - master
+jobs:
+  - job: "build gol"
+    displayName: build maven package for gameoflife
+    pool:
+      name: Azure Pipelines
+      vmImage: ubuntu-latest
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPOMFile: 'pom.xml'
+        goals: 'package'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
+    - task: CopyFiles@2
+      inputs:
+        Contents: '**/target/gameoflife.war'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'GameOfLife artifacts'
+
+
+
+
+
+   
+'''
+![hema](./images/9.png)
+![hema](./images/8.png)
 
 
 
