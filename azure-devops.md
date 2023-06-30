@@ -40,7 +40,14 @@
         * select set hostname and press enter , Type the desired hostname and choose OK.
     
     Option 3. Edit the Configuration Files
+* 
 cofiguration drift : difference b/w desired state and actual stage
+
+
+### pool: 
+ * pool: collection of agents(if u have multiple machines)
+
+ 
 
 
 

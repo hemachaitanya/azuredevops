@@ -1,0 +1,22 @@
+---
+
+trigger: 
+  - master
+stages:
+  - stage:
+jobs:
+  - job: first-job
+    displayName: "agent1-job"
+    pool:
+      name: default
+      vmImage: ubuntu-latest
+    steps:
+      - bash: pwd
+  
+  - job: second-job
+    displayName: "agent2-job"
+    pool:
+      name: hema
+      vmImage: ubuntu-latest
+    steps:
+      - bash: printenv

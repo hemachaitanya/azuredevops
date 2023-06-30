@@ -1,0 +1,42 @@
+---
+trigger: 
+  - master
+
+jobs:
+  - job: first-job
+    displayName: "agent1job"
+    pool:
+      name: default
+      vmImage: ubuntu-latest
+    steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: src/NopCommercs.sln
+  
+  - job: second-job
+    displayName: "agent2"
+    pool:
+      name: hema
+      vmImage: ubuntu-latest
+    steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          publishWebProjects: true
+
+---
+trigger:
+  - master  
+pool:
+  name: default
+  vmImage: ubuntu-latest
+steps:
+  - task:  DotNetCoreCLI@2
+    inputs:
+      command: 'restore'
+  - task: DotNetCoreCLI@2
+    inputs:
+    command: 'build'
+    
+
