@@ -1,14 +1,5 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-      version = "5.6.2"
-    }
-  }
-}
-
 provider "aws" {
-  # Configuration options
+    region = "us-east-1"
 }
 resource "aws_vpc" "tfvpc" {
     cidr_block = "192.168.0.0/16"
