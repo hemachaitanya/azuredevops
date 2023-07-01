@@ -1,18 +1,11 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- main
-
+---
 pool:
+  name: Default
   vmImage: ubuntu-latest
-
+trigger:
+  - main
 steps:
-- task: AWSCLI@1
-  inputs:
-    awsCredentials: 'aws'
-    regionName: 'us-east-1'
-    awsCommand: 'aws --version'
-    awsSubCommand: 'aws --version'
+  - script: ansible-playbook -i hosts --syntax-check nginx.yaml
+
+
+
