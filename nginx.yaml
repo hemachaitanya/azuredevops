@@ -4,7 +4,7 @@
   become: yes
   tasks:
     - name: install nginx
-      apt:
+      ansible.builtin.apt:
       name: nginx
       update_cache: true
       state: yes
