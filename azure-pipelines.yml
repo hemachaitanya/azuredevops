@@ -15,3 +15,4 @@ steps:
     awsCredentials: 'aws'
     regionName: 'us-east-1'
     awsCommand: 'aws --version'
+    awsSubCommand: 'aws --version'
