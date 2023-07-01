@@ -8,6 +8,6 @@ steps:
   - script: terraform init 
   - script: terraform validate
   - script: terraform plan --auto-approve
-  - script: terraform apply -auto-approve
+  - script: terraform apply --auto-approve
 
 
