@@ -7,12 +7,12 @@ trigger:
 - main
 
 pool:
+  name: Default
   vmImage: ubuntu-latest
-
+trigger:
+  - main
 steps:
-- task: AWSCLI@1
-  inputs:
-    awsCredentials: 'aws'
-    regionName: 'us-east-1'
-    awsCommand: 'aws --version'
-    awsSubCommand: 'aws --version'
+  - script: ansible-playbook -i hosts --syntax-check nginx.yaml
+
+
+
