@@ -1,18 +1,70 @@
 ---
-pool: Default
+pool: Azure Pipelines
 trigger: 
 steps:
   - task: Maven@4
     inputs:
       mavenPOMFile: 'pom.xml' 
       goals: 'package'
+      publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       allowBrokenSymlinks: true
       javaHomeOption: 'JDKVersion'
-      mavenVersionOption: 3.6.3
-    displayName: build
-    timeoutInMinutes: 60
+      jdkVersionOption: '1.17'
+      mavenVersionOption: '3.6.3'
+  - task: CopyFiles@2
+    inputs:
+      Contents: '**/target/*.jar'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: My-spring-projects
+
+#### for self hosted agent
+ ---
+pool: Default
+trigger: 
+  - master
+steps:
+  - task: Maven@4
+    inputs:
+      mavenPOMFile: 'pom.xml' 
+      goals: 'package'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      allowBrokenSymlinks: true
+      javaHomeOption: 'Path'
+      jdkDirectory: '/usr/lib/jvm/openjdk-1.17-jdk/bin64'
+      mavenVersionOption: '3.6.3'
+  - task: CopyFiles@2
+    inputs:
+      Contents: '**/target/*.jar'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: My-spring-projects
+
+### build gradel
+ ---
+ pool:
+   name: Default
+   vmI
+
+  task: Gradle@3
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'build'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    codeCoverageClassFilesDirectories: 'build/classes/main/'
+    javaHomeOption: 'JDKVersion'
+    
 
   
+
+
+ 
 
 
