@@ -8,5 +8,6 @@ steps:
   - script: terraform init 
   - script: terraform validate
   - script: terraform apply -auto-approve
+  - script: terraform destroy -auto-approve
 
 
