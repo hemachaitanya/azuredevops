@@ -75,3 +75,26 @@ The cost of fixing issues at different stages
           token
       * ./run.sh
 
+### variables
+ * name: one
+   variable: initialvalue
+   echo '$(one)'
+   echo '${{ parameter.one }}'
+
+### what is the difference between the variable and parameter
+
+*  Variables are quantities which vary from individual to individual.
+
+* By contrast, parameters do not relate to actual measurements or attributes but to quantities defining a theoretical model. 
+
+* use parameters we choose options , for variables we git single value.
+* variables are reusable
+    built
+    compalision
+    test
+    readonly= we can't cahnge
+    secrete= sensible var.
+* parameters arenot reusable.
+*
+
+* 

@@ -3,14 +3,18 @@
 * programming languages are three types
     * compailer language
 #### compailer language
-    * its used for converting high level programming language to low level programming language
+    * its used for converting high level programming language or machine level language to low level programming language
+    (ex: java,ruby,etc)
     (ex: before the packaging it will be available(like dubbing for movie release in theater with different languages))
 
     * interpreter language
+###
 #### interpreter language
-    * its used as translater 
+    * its used as translater (it will convrting heigh level language to machine level language)
 
-    * byte code language
+    * byte code languageguage
+### Assembler
+   * it will convert Assembly language to machine level lan
 
 ### commands
 * sudo apt-cache search openjdk-17
