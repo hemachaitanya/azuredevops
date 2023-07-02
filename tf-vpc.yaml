@@ -5,6 +5,7 @@ pool:
 trigger:
   - main
 steps:
+  - script: pwd
   - script: terraform init 
   - script: terraform validate
   - script: terraform apply -auto-approve
