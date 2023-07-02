@@ -91,5 +91,16 @@ jobs:
 ![hema](./images/9.png)
 ![hema](./images/8.png)
 
+### azure devops classic pipelines
+* 
+
+### we want to give some approvel by using tasks
+
+<https://learn.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&tabs=check-pass>
+### you want to send notifications to emails by using azuredevops
+<https://learn.microsoft.com/en-us/azure/devops/organizations/notifications/manage-team-group-global-organization-notifications?view=azure-devops>
+
+### 
+
 
 
