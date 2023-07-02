@@ -6,18 +6,30 @@ pool:
 trigger:
   - main
 steps:
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
 
-  - task: TerraformTaskV4@4
-    inputs:
-      provider: 'aws'
-      command: 'init'
-      backendServiceAWS: 'aws-terraform'
-      backendAWSBucketName: 'pulihora22'
-      backendAWSKey: 'chaitu/vartf.tfvars'
-  - script: pwd
-  - script: terraform init 
-  - script: terraform validate
-  - script: terraform apply -auto-approve
-  - script: terraform destroy -auto-approve
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'aws'
+    command: 'init'
+    backendServiceAWS: 'aws-terraform'
+    backendAWSBucketName: 'pulihora22'
+    backendAWSKey: 'statefiles/sample.tfstate'
 
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'aws'
+    command: 'plan'
+    environmentServiceNameAWS: 'aws-terraform'
+    backendAWSBucketName: 'pulihora22'
+    backendAWSKey: 'statefiles/sample.tfstate' 
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'aws'
+    command: 'apply'
+    environmentServiceNameAWS: 'aws-terraform'
+    backendAWSBucketName: 'pulihora22'
+    backendAWSKey: 'statefiles/sample.tfstate'
 
