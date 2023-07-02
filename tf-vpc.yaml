@@ -1,10 +1,19 @@
 ---
+
 pool: 
   name: Default
   vmImage: ubuntu-latest
 trigger:
   - main
 steps:
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'aws'
+      command: 'init'
+      backendServiceAWS: 'aws-terraform'
+      backendAWSBucketName: 'pulihora22'
+      backendAWSKey: 'chaitu/vartf.tfvars'
   - script: pwd
   - script: terraform init 
   - script: terraform validate
