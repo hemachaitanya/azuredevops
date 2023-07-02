@@ -4,3 +4,7 @@ resource "aws_vpc" "tfvpc" {
       Name = "tfvpcs"
     }
 }
+
+provider "aws" {
+  region = "us-east-1"
+}
