@@ -32,4 +32,9 @@ steps:
     environmentServiceNameAWS: 'aws-terraform'
     backendAWSBucketName: 'pulihora22'
     backendAWSKey: 'statefiles/sample.tfstate'
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'aws'
+    command: 'destroy'
+    environmentServiceNameAWS: 'aws-terraform'
 
