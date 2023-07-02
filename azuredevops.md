@@ -97,4 +97,24 @@ The cost of fixing issues at different stages
 * parameters arenot reusable.
 *
 
-* 
+*  
+
+#### pipelines execution on  phases
+  * 1 queue phase: agent execute for other job
+  * 2 runtime: 
+  * 3 compile: yaml is allowcated variables are executed or not 
+
+#### variables can be used 3 different expressions
+  * macro '$(var)'
+  * templete '${{ variables.var}}'
+  * script variables : it can be set from scripts '##vso[task.setvariables variable=myVAR]'  
+  "we want to change new value we use set variables"
+
+  <https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch>
+
+  *  i have 10 variables then we use  secrets and variables
+  ![hema](./images/10.png)
+
+  any sensible information we use in pipeline we use variable groups
+  
+
