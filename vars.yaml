@@ -1,0 +1,20 @@
+---
+trigger:
+  - master
+jobs:
+- job: myJob
+  timeoutInMinutes: 5
+  displayName: build gradel
+  pool:
+  name: Azure Pipelines
+  vmImage: ubuntu-latest
+  - task: Gradle@3
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'build'
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      codeCoverageClassFilesDirectories: 'build/classes/main/'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'
+      

@@ -8,7 +8,15 @@
     (ex: before the packaging it will be available(like dubbing for movie release in theater with different languages))
 
     * interpreter language
-###
+    
+### variable
+ <https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch>
+
+### parameters
+
+<https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml>
+
+
 #### interpreter language
     * its used as translater (it will convrting heigh level language to machine level language)
 
