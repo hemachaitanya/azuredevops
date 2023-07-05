@@ -1,6 +1,19 @@
 ---
 trigger:
   - master
+variables:
+  - name: one
+   value: initialValue 
+parameters:
+- name: gradelgoal # Required as first property.
+  displayName: gradel goal  # Human-readable name for the parameter.
+  type: string
+  default: package
+  values: 
+    - package
+    - clean package
+    - clean install
+    - install
 jobs:
 - job: myJob
   timeoutInMinutes: 5
@@ -17,4 +30,43 @@ jobs:
       codeCoverageClassFilesDirectories: 'build/classes/main/'
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.17'
+
+
+---
+trigger:
+  - master
+parameters:
+  - name: javaversion
+    type: string
+    default: '1.17'
+  - name: gradelBuildGoal
+    type: sring
+    default: package
+  - name: artifactpath
+    type: string
+    defalut: '**/*.jar'
+  steps:
+  - task: Gradle@3
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: 'build'
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      codeCoverageClassFilesDirectories: 'build/classes/main/'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: ${{ parameters.javaversion }}
+      - task: CopyFiles@2
+        inputs:
+          Contents: ${{ parameters.artifactPath }}
+          TargetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathToPublish: $(Build.ArtifactStagingDirectory)
+          artifactName: ${{ parameters.artifactName }}
+
+
+      
+    
+  
+  
       

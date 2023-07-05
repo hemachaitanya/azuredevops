@@ -1,0 +1,12 @@
+---
+pool:
+  name: Azure Pipelines
+  vmImage: ubuntu-latest
+trigger: 
+  - master
+extends:
+  template: ./templet/spring.yaml
+  parameters:
+    branch: 'master'
+    goal: 'build'
+    jdkVersion: '1.17'

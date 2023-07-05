@@ -1,0 +1,23 @@
+---
+parameters:
+  - name: branch
+    displayName: Git Branch
+    type: string
+    default: 'main'
+  - name: goal
+    displayname: build
+    type: string
+    default: 'package'
+  - name: javaversion
+    type: string
+    default: '1.17'
+steps:
+  - task: Gradle@3
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      tasks: ${{ parameters.goal }}
+      codeCoverageClassFilesDirectories: 'build/classes/main/'
+      javaHomeOption: 'JDKVersion'
+      publishJUnitResults: true
+      jdkVersionOption: ${{ parameters.javaversion }}
+      continueOnError: true
