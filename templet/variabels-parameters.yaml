@@ -1,0 +1,28 @@
+---
+pool:
+  name: Azure Pipelines
+  vmImage: ubuntu-latest
+trigger:
+  - master
+variables:
+  MAVENGOAL: package
+  MY_CONTENTS: '**/target/*.war'
+  MY_ARTIFACT_NAME: 'gol'
+steps:
+  - task: Maven@3
+    inputs:
+      mavenPOMFile: 'pom.xml'
+      goals: $(MAVENGOAL)
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: "1.8"
+  - task: CopyFiles@2
+    inputs:
+       Contents: $(MY_CONTENTS)
+       TargetFolder: $(build.artifactstagingdirectory)
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: ${{ MY_ARTIFACT_NAME }}
+
+  
