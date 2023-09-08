@@ -61,7 +61,7 @@ cofiguration drift : difference b/w desired state and actual stage
 
 ### Publish artifacts is used for to save the artifacts
 
-'''
+```
 ---
 trigger:
   - master
@@ -89,13 +89,8 @@ jobs:
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'GameOfLife artifacts'
-
-
-
-
-
    
-'''
+```
 ![hema](./images/9.png)
 ![hema](./images/8.png)
 
