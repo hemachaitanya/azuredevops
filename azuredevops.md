@@ -116,5 +116,58 @@ The cost of fixing issues at different stages
   ![hema](./images/10.png)
 
   any sensible information we use in pipeline we use variable groups
+
+ 
+ ```yaml
+trigger:
+  branches:
+    include:
+      - master
+      - release/*
+      - features/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Checkout
+  jobs:
+  - job: CheckoutJob
+    steps:
+    - checkout: self
+
+- stage: Build
+  condition: eq(variables['Build.SourceBranchName'], 'master')
+  jobs:
+  - job: BuildJob
+    steps:
+    - script: |
+        # Your build commands here
+
+- stage: Test
+  condition: eq(variables['Build.SourceBranchName'], 'master') || startsWith(variables['Build.SourceBranchName'], 'features/')
+  jobs:
+  - job: TestJob
+    steps:
+    - script: |
+        # Your test commands here
+
+- stage: DeployToStaging
+  condition: eq(variables['Build.SourceBranchName'], 'master') || eq(variables['Build.SourceBranchName'], 'release/*')
+  jobs:
+  - job: DeployToStagingJob
+    steps:
+    - script: |
+        # Deployment steps to staging environment
+
+- stage: DeployToFeatureEnvironment
+  condition: startsWith(variables['Build.SourceBranchName'], 'features/')
+  jobs:
+  - job: DeployToFeatureEnvironmentJob
+    steps:
+    - script: |
+        # Deployment steps to feature environment
+
+```
   
 
