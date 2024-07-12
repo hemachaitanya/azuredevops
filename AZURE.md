@@ -212,10 +212,166 @@ Use Azure Advisor and performance metrics to identify underutilized or overprovi
 
 Implement auto-scaling and reserved instances for cost-effective and efficient resource management.
 
+### terraform create storage account 
 
+```terraform.tf
+provider "azurerm" {
+  features {}
+}
 
+resource "azurerm_resource_group" "rg" {
+  name     = "rg-storage-demo"
+  location = "East US"
+}
 
+resource "azurerm_storage_account" "storage" {
+  name                     = "storagedemotf123"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 
+  blob_properties {
+    delete_retention_policy {
+      days = 7
+    }
+  }
 
+  file_properties {
+    delete_retention_policy {
+      days = 7
+    }
+  }
 
+  tags = {
+    environment = "demo"
+  }
+}
+
+resource "azurerm_storage_container" "blob_container" {
+  name                  = "blobcontainer"
+  storage_account_name  = azurerm_storage_account.storage.name
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_share" "file_share" {
+  name                 = "fileshare"
+  storage_account_name = azurerm_storage_account.storage.name
+  quota                = 50
+}
+
+resource "azurerm_storage_account_blob_container_sas" "blob_sas" {
+  storage_account_name   = azurerm_storage_account.storage.name
+  container_name         = azurerm_storage_container.blob_container.name
+  permissions            = "racwdl"
+  start                  = "2023-01-01"
+  expiry                 = "2023-12-31"
+  https_only             = true
+
+  depends_on = [azurerm_storage_container.blob_container]
+}
+
+output "blob_endpoint" {
+  value = azurerm_storage_account.storage.primary_blob_endpoint
+}
+
+output "file_endpoint" {
+  value = azurerm_storage_account.storage.primary_file_endpoint
+}
+
+output "blob_container_sas" {
+  value = azurerm_storage_account_blob_container_sas.blob_sas.sas
+}
+
+```
+### create some storage service with blob and some container with file inside the blob using ARM template 
+
+```azuredevops.json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "supportsHttpsTrafficOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2019-06-01",
+      "name": "[concat(parameters('storageAccountName'), '/default/', parameters('blobContainerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+      "apiVersion": "2019-06-01",
+      "name": "[concat(parameters('storageAccountName'), '/default/', parameters('fileShareName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+      ],
+      "properties": {
+        "quota": 50
+      }
+    }
+  ],
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage account."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "East US",
+      "metadata": {
+        "description": "Location for the storage account."
+      }
+    },
+    "blobContainerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Blob container."
+      }
+    },
+    "fileShareName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the File share."
+      }
+    }
+  }
+}
+
+```
+```parameters.json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "value": "storagedemotf123"
+    },
+    "location": {
+      "value": "East US"
+    },
+    "blobContainerName": {
+      "value": "blobcontainer"
+    },
+    "fileShareName": {
+      "value": "fileshare"
+    }
+  }
+}
 ```
