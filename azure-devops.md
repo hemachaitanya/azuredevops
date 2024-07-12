@@ -1,4 +1,128 @@
-### programming languages
+### programming language
+
+Here is a detailed Azure DevOps pipeline for a Spring Boot application with at least 8 jobs inside the pipeline, using YAML syntax:
+
+```
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  artifactName: 'springboot-app'
+  dockerRegistry: 'yourregistry'
+  dockerRepository: 'yourrepository'
+  dockerTag: 'latest'
+  azureAppService: 'yourappservice'
+  azureResourceGroup: 'yourresourcegroup'
+
+stages:
+- build
+- unitTest
+- codeAnalysis
+- package
+- integrationTest
+- deployDev
+- performanceTest
+- deployProd
+
+jobs:
+  - job: build
+    stage: build
+    steps:
+    - task: Maven@3
+      displayName: 'Maven build'
+      inputs:
+        goals: 'package'
+      outputs:
+        artifactName: '$(artifactName)'
+
+  - job: unitTest
+    stage: unitTest
+    steps:
+    - task: Maven@3
+      displayName: 'Maven test'
+      inputs:
+        goals: 'test'
+      outputs:
+        testResults: '$(artifactName)/surefire-reports/*.xml'
+
+  - job: codeAnalysis
+    stage: codeAnalysis
+    steps:
+    - task: SonarQubeAnalyze@4
+      displayName: 'SonarQube analysis'
+      inputs:
+        sonarQubeConfig: 'sonar.properties'
+      outputs:
+        codeQualityReport: '$(artifactName)/sonar-report.json'
+
+  - job: package
+    stage: package
+    steps:
+    - task: Docker@2
+      displayName: 'Docker build'
+      inputs:
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+      outputs:
+        dockerImage: '$(dockerRegistry)/$(dockerRepository):$(dockerTag)'
+
+  - job: integrationTest
+    stage: integrationTest
+    steps:
+    - task: Docker@2
+      displayName: 'Docker run'
+      inputs:
+        command: 'run'
+        containerName: '$(artifactName)'
+      outputs:
+        testResults: '$(artifactName)/integration-test-reports/*.xml'
+
+  - job: deployDev
+    stage: deployDev
+    steps:
+    - task: AzureAppServiceDeploy@4
+      displayName: 'Azure App Service deploy'
+      inputs:
+        azureResourceManagerConnection: $(azureAppService)
+        appName: '$(azureAppService)'
+        package: '$(artifactName)'
+
+  - job: performanceTest
+    stage: performanceTest
+    steps:
+    - task: JMeterTest@2
+      displayName: 'JMeter test'
+      inputs:
+        testPlan: '$(artifactName)/performance-test-plan.jmx'
+      outputs:
+        performanceTestResults: '$(artifactName)/performance-test-results/*.xml'
+
+  - job: deployProd
+    stage: deployProd
+    steps:
+    - task: AzureAppServiceDeploy@4
+      displayName: 'Azure App Service deploy'
+      inputs:
+        azureResourceManagerConnection: $(azureAppService)
+        appName: '$(azureAppService)'
+        package: '$(artifactName)'
+```
+
+This YAML pipeline definition includes eight jobs, each representing a stage in the pipeline. The jobs are:
+
+1. Build: Compiles the Spring Boot application using Maven.
+2. Unit Test: Runs unit tests using Maven.
+3. Code Analysis: Performs code analysis using SonarQube.
+4. Package: Builds a Docker image using the Dockerfile.
+5. Integration Test: Runs integration tests using Docker.
+6. Deploy Dev: Deploys the application to a development environment in Azure App Service.
+7. Performance Test: Runs performance tests using JMeter.
+8. Deploy Prod: Deploys the application to a production environment in Azure App Service.
+
+Note that you need to replace the placeholders (`yourregistry`, `yourrepository`, `yourappservice`, `yourresourcegroup`) with your actual Azure DevOps and Azure resources.
 
 * programming languages are three types
     * compailer language
